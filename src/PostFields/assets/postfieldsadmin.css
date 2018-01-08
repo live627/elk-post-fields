@@ -1,0 +1,50 @@
+dt[id], dd[id] {
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+    overflow: hidden;
+    max-height: 0;
+}
+
+dt[id].slideInDown, dd[id].slideInDown {
+    opacity: 1;
+    max-height: 100vh;
+}
+
+#postFieldsOnTopic input[type=text],
+#postFieldsOnTopic textarea,
+#postFieldsOnTopic select,
+.settings input[type=text] {
+    padding: 0 0.5em;
+}
+
+#postFieldsOnTopic div {
+    padding: 0.25em 0;
+}
+
+#postFieldsOnTopic div * {
+    vertical-align: top;
+}
+
+#postFieldsOnTopic input[type=text],
+#postFieldsOnTopic textarea,
+#postFieldsOnTopic select,
+#postFieldsOnTopic fieldset {
+    width: 55%;
+}
+
+.settings input[type=text] {
+    width: 85%;
+}
+
+#postFieldsOnTopic span,
+#postFieldsOnTopic strong {
+    display: inline-block;
+    text-indent: 35px;
+    width: 35%;
+}
+
+#postFieldsOnTopic span,
+#postFieldsOnTopic strong,
+#postFieldsOnTopic fieldset {
+    display: inline-block;
+}

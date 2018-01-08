@@ -1,0 +1,7 @@
+{
+  "name": "Post Fields",
+  "description": "Custom fields for posts",
+  "extra": {
+    "setting_url": "action=admin;area=postfields"
+  }
+}

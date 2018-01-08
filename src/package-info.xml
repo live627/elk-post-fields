@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
+<package-info xmlns="http://www.elkarte.net/site/package-info">
+    <id>live627:post_fields</id>
+    <name>Post Fields</name>
+    <type>modification</type>
+    <version>1.1</version>
+
+    <install for="1.1 - 1.1.99">
+        <code>check.php</code>
+        <database>install.php</database>
+        <require-dir name="PostFields" destination="ADDONSDIR"/>
+        <require-dir name="PostFields/modules/PostFields" destination="SOURCEDIR/modules"/>
+        <require-file name="PostFields.template.php" destination="THEMEDIR"/>
+        <require-file name="PostFields.english.php" destination="LANGUAGEDIR/english"/>
+        <require-file name="feature_Postfields.png" destination="IMAGESDIR/admin"/>
+        <redirect url="?action=admin;area=corefeatures#feature_Postfields"/>
+    </install>
+
+    <uninstall for="1.1 - 1.1.99">
+        <code>uninstall-required.php</code>
+        <remove-dir name="ADDONSDIR/PostFields"/>
+        <remove-dir name="SOURCEDIR/modules/PostFields"/>
+        <remove-file name="THEMEDIR/PostFields.template.php"/>
+        <remove-file name="LANGUAGEDIR/english/PostFields.english.php"/>
+        <remove-file name="IMAGESDIR/admin/feature_Postfields.png"/>
+    </uninstall>
+
+</package-info>
