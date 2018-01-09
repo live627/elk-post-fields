@@ -35,7 +35,7 @@ class Admin extends Ohara
         // Changing the status?
         if (isset($_POST['save'])) {
             checkSession();
-            foreach ($this->util->getFields() as $field) {
+            foreach ($this->util->fetchFields() as $field) {
                 $bbc = !empty($_POST['bbc'][$field['id_field']]) ? 'yes' : 'no';
                 if ($bbc != $field['bbc']) {
                     Database::query(
@@ -99,13 +99,13 @@ class Admin extends Ohara
             'get_items' => [
                 'function' => [$this, 'process'],
                 'params' => [
-                    $this->util->getFields(),
+                    $this->util->fetchFields(),
                     'pf_fields',
                 ],
             ],
             'get_count' => [
                 'function' => function () {
-                    return count($this->util->getFields());
+                    return count($this->util->fetchFields());
                 },
             ],
             'columns' => [

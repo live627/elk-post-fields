@@ -20,11 +20,11 @@ class Util extends Ohara
     public function __construct()
     {
         Database::getInstance();
-        $this->getFields();
+        $this->fetchFields();
         parent::__construct();
     }
 
-    public function getFields()
+    public function fetchFields()
     {
         if (empty($this->fields)) {
             $request = Database::query(
@@ -34,7 +34,9 @@ class Util extends Ohara
                 FROM {db_prefix}message_fields'
             );
             while ($row = Database::fetch_assoc($request)) {
-                $this->fields[$row['id_field']] = $row;
+                if (!in_array(false, call_integration_hook('integrate_fetch_post_fields', [&$row]), true)) {
+                    $this->fields[$row['id_field']] = $row;
+                }
             }
             Database::free_result($request);
         }
