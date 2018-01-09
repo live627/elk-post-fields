@@ -23,23 +23,22 @@ class DataValidator extends \Data_Validator
      */
     protected function _validate_regex_syntax($field, $input, $validation_parameters = null)
     {
-        global $php_errormsg;
-
         if (!isset($input[$field])) {
             return;
         }
 
         // Turn off all error reporting
-        error_reporting(0);
+        $errMask = error_reporting(0);
 
         // Catch any errors the regex may produce.
         set_error_handler([$this, 'handleError']);
 
         if (preg_match($input[$field], null) === false) {
             restore_error_handler();
+            error_reporting($errMask);
 
             return [
-                'error_msg' => $php_errormsg,
+                'error_msg' => error_get_last()['message'],
                 'error' => 'validate_regex_syntax',
                 'field' => $field,
             ];
