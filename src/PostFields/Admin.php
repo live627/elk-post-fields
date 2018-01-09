@@ -348,7 +348,7 @@ class Admin extends Ohara
             }
         } elseif (isset($_POST['delete']) && $context['field']['name']) {
             checkSession();
-            $this->deleteFields($context['fid']);
+            $this->deleteFields([$context['fid']]);
             redirectexit('action=admin;area=postfields');
         }
 
