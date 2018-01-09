@@ -181,9 +181,13 @@ class Util extends Ohara
         require_once(__DIR__.'/Class-PostFields.php');
         $class_name = __NAMESPACE__.'\\PostFields_'.$field['type'];
         if (!class_exists($class_name)) {
-            Errors::instance()->fatal_error(
-                'Param "'.$field['type'].'" not found for field "'.$field['name'].'" at ID #'.$field['id_field'].'.',
-                false
+            throw new \Exception(
+                sprintf(
+                    'Param "%s" not found for field "%s" at ID #%d.',
+                    $field['type'],
+                    $field['name'],
+                    $field['id_field']
+                )
             );
         }
 

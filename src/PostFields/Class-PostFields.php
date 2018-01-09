@@ -123,9 +123,13 @@ class PostFields_text extends PostFieldsBase
         }
         $class_name = __NAMESPACE__.'\\postFieldMask_'.$this->field['mask'];
         if (!class_exists($class_name)) {
-            Errors::instance()->fatal_error(
-                'Mask "'.$this->field['mask'].'" not found for field "'.$this->field['name'].'" at ID #'.$this->field['id_field'].'.',
-                false
+            throw new \Exception(
+                sprintf(
+                    'Mask "%s" not found for field "%s" at ID #%d.',
+                    $this->field['mask'],
+                    $this->field['name'],
+                    $this->field['id_field']
+                )
             );
         }
         $mask = new $class_name($this->value, $this->field);
