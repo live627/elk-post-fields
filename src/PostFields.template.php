@@ -113,8 +113,13 @@ function template_edit()
 							<select name="type" id="field_type" onchange="updateInputBoxes();">';
 
     foreach ($context['field']['types'] as $type) {
-        echo '
-								<option value="'.$type.'"', $context['field']['type'] == $type ? ' selected' : '', '>', $txt['PostFields_type_'.$type], '</option>';
+        printf(
+            '
+								<option value="%s"%s>%s</option>',
+            $type,
+            $context['field']['type'] == $type ? ' selected' : '',
+            $txt['PostFields_type_'.$type]
+        );
     }
 
     echo '
@@ -157,8 +162,14 @@ function template_edit()
 							<div>';
 
     foreach ($context['field']['options'] as $k => $option) {
-        echo '
-								', $k == 0 ? '' : '<br>', '<input type="radio" name="default_select" value="', $k, '"', $context['field']['default_select'] == $k ? ' checked' : '', '><input type="text" name="select_option[', $k, ']" value="', $option, '">';
+        printf(
+            '
+								%s<input type="radio" name="default_select" value="%s"%s><input type="text" name="select_option[%2$s]" value="%s">',
+            $k == 0 ? '' : '<br>',
+            $k,
+            $context['field']['default_select'] == $k ? ' checked' : '',
+            $option
+        );
     }
 
     echo '
@@ -183,13 +194,19 @@ function template_edit()
 							<br /><span class="smalltext">', $txt['PostFields_mask_desc'], '</span>
 						</dt>
 						<dd id="mask_dd">
-							<select name="mask" id="field_mask" onchange="updateInputBoxes2();">
-								<option value="nohtml"', $context['field']['mask'] == 'nohtml' ? ' selected' : '', '>No HTML Tags</option>
-								<option value="img"', $context['field']['mask'] == 'img' ? ' selected' : '', '>Image Attachment</option>
-								<option value="number"', $context['field']['mask'] == 'number' ? ' selected' : '', '>', $txt['PostFields_mask_number'], '</option>
-								<option value="float"', $context['field']['mask'] == 'float' ? ' selected' : '', '>', $txt['PostFields_mask_float'], '</option>
-								<option value="email"', $context['field']['mask'] == 'email' ? ' selected' : '', '>', $txt['PostFields_mask_email'], '</option>
-								<option value="regex"', $context['field']['mask'] == 'regex' ? ' selected' : '', '>', $txt['PostFields_mask_regex'], '</option>
+							<select name="mask" id="field_mask" onchange="updateInputBoxes2();">';
+
+    foreach ($context['field']['masks'] as $mask) {
+        printf(
+            '
+								<option value="%s"%s>%s</option>',
+            $mask,
+            $context['field']['mask'] == $mask ? ' selected' : '',
+            $txt['PostFields_mask_'.$mask]
+        );
+    }
+
+    echo '
 							</select>
 						</dd>
 						<dt id="regex_dt">

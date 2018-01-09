@@ -291,6 +291,7 @@ class Admin extends Ohara
 	<link rel="stylesheet" type="text/css" href="'.$this->boardUrl.'/addons/PostFields/assets/postfieldsadmin.css" />
 	<script type="text/javascript" src="'.$this->boardUrl.'/addons/PostFields/assets/postfieldsadmin.js"></script>';
         loadTemplate('PostFields');
+        require_once(__DIR__.'/Class-PostFields.php');
         require_once(SUBSDIR.'/Boards.subs.php');
         $context += getBoardList(['not_redirection' => true]);
         loadLanguage('Profile');
@@ -373,8 +374,8 @@ class Admin extends Ohara
                 'groups' => [-3],
             ];
         }
-        require_once(__DIR__.'/Class-PostFields.php');
         $context['field']['types'] = $this->get_extends_number('ElkArte\\addons\\PostFields\\PostFieldsBase');
+        $context['field']['masks'] = $this->get_extends_number('ElkArte\\addons\\PostFields\\postFieldMaskBase');
         $context['groups'] = $this->util->list_groups($context['field']['groups']);
         $context['all_groups_checked'] = empty(array_diff_key(
             $context['groups'],
@@ -407,10 +408,22 @@ class Admin extends Ohara
         $sanitation = [];
         $validation = [
             'name' => 'required',
-            'type' => 'required|contains[text, textarea, radio, check, select]',
+            'type' => sprintf(
+                'required|contains[%s]',
+                implode(
+                    ',',
+                    iterator_to_array($this->get_extends_number('ElkArte\\addons\\PostFields\\PostFieldsBase'))
+                )
+            ),
         ];
         if ($type == 'text' || $type == 'textarea') {
-            $validation['mask'] = 'required|contains[nohtml, number, float, email, regex]';
+            $validation['mask'] = sprintf(
+                'required|contains[%s]',
+                implode(
+                    ',',
+                    iterator_to_array($this->get_extends_number('ElkArte\\addons\\PostFields\\postFieldMaskBase'))
+                )
+            );
         }
         if ($mask == 'regex') {
             $validation['regex'] = 'required|regex_syntax';
