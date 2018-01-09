@@ -72,8 +72,11 @@ class DataValidator extends \Data_Validator
     protected function _sanitation_htmlpurifier($field, $validation_parameters = null)
     {
         require_once __DIR__.'/HTMLPurifier.standalone.php';
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('Core', 'DefinitionCache', null);
+        $definition = \HTMLPurifier_ConfigSchema::instance();
+        $definition->add('HTML.TargetNoopener', true, 'bool', false);
+        $definition->add('Core.LegacyEntityDecoder', false, 'bool', false);
+        $definition->add('Core.AggressivelyRemoveScript', true, 'bool', false);
+        $config = new \HTMLPurifier_Config($definition);
         $config->set('HTML.Doctype', 'XHTML 1.1');
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
