@@ -49,6 +49,7 @@ $txt['PostFields_can_search'] = 'Searchable';
 $txt['PostFields_can_search_desc'] = 'Specifies if the fields can be searched.';
 $txt['PostFields_mask'] = 'Input Mask';
 $txt['PostFields_mask_desc'] = 'This validates the input supplied by the user.';
+$txt['PostFields_mask_nohtml'] = 'No HTML tags (Absolute bare minimum filtering)';
 $txt['PostFields_mask_number'] = 'Whole number (Scientific notation not allowed)';
 $txt['PostFields_mask_float'] = 'Floating-point number (Decimals allowed)';
 $txt['PostFields_mask_email'] = 'Email (Must be shorter than 255 characters)';
