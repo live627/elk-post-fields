@@ -270,6 +270,16 @@ abstract class postFieldMaskBase implements postFieldMask
     }
 }
 
+class postFieldMask_nohtml extends postFieldMaskBase
+{
+    public function validate()
+    {
+        if (strip_tags($this->value) != $this->value) {
+            $this->err = true;
+        }
+    }
+}
+
 class postFieldMask_email extends postFieldMaskBase
 {
     public function validate()
@@ -310,16 +320,6 @@ class postFieldMask_float extends postFieldMaskBase
     public function validate()
     {
         if (filter_var($this->value, FILTER_VALIDATE_FLOAT) === false) {
-            $this->err = true;
-        }
-    }
-}
-
-class postFieldMask_nohtml extends postFieldMaskBase
-{
-    public function validate()
-    {
-        if (strip_tags($this->value) != $this->value) {
             $this->err = true;
         }
     }
