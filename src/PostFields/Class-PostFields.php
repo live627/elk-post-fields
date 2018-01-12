@@ -285,6 +285,8 @@ class postFieldMask_email extends postFieldMaskBase
     public function validate()
     {
         require_once(__DIR__.'/Punycode.php');
+        require_once(__DIR__.'/Exception/DomainOutOfBoundsException.php');
+        require_once(__DIR__.'/Exception/LabelOutOfBoundsException.php');
         if (!filter_var((new \TrueBV\Punycode\Punycode)->encode($this->value), FILTER_VALIDATE_EMAIL)) {
             $this->err = true;
         }
