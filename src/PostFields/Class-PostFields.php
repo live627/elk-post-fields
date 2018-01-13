@@ -64,9 +64,9 @@ abstract class PostFieldsBase extends Ohara implements PostFields
         if ($this->err === true) {
             $err = trim(strpbrk(static::class, '_'), '_').'_invalid_value';
             if ($this->text($err) !== false) {
-                $this->err = ['pf_'.$err, $this->field['name']];
+                $this->err = ['pf_'.$err, filter_var($this->field['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS)];
             } else {
-                $this->err = ['pf_invalid_value', $this->field['name']];
+                $this->err = ['pf_invalid_value', filter_var($this->field['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS)];
             }
         }
 
@@ -81,7 +81,7 @@ abstract class PostFieldsBase extends Ohara implements PostFields
      */
     public function getValue()
     {
-        return $this->value;
+        return filter_var($this->value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 
     /**
@@ -111,9 +111,9 @@ class PostFields_text extends PostFieldsBase
 {
     public function setHtml()
     {
-        $this->output_html = $this->value;
+        $this->output_html = filter_var($this->value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $this->input_html =
-            '<input type="text" name="postfield['.$this->field['id_field'].']" '.(!empty($this->field['length']) ? 'maxlength="'.$this->field['length'].'"' : '').' value="'.$this->value.'">';
+            '<input type="text" name="postfield['.$this->field['id_field'].']" '.(!empty($this->field['length']) ? 'maxlength="'.$this->field['length'].'"' : '').' value="'.filter_var($this->value, FILTER_SANITIZE_FULL_SPECIAL_CHARS).'">';
     }
 
     public function validate()
@@ -127,7 +127,7 @@ class PostFields_text extends PostFieldsBase
                 sprintf(
                     'Mask "%s" not found for field "%s" at ID #%d.',
                     $this->field['mask'],
-                    $this->field['name'],
+                    filter_var($this->field['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                     $this->field['id_field']
                 )
             );
@@ -144,10 +144,10 @@ class PostFields_textarea extends PostFields_text
 {
     public function setHtml()
     {
-        $this->output_html = $this->value;
+        $this->output_html = filter_var($this->value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         list ($rows, $cols) = json_decode($this->field['default_value']);
         $this->input_html =
-            '<textarea name="postfield['.$this->field['id_field'].']" rows="10" cols="50">'.$this->value.'</textarea>';
+            '<textarea name="postfield['.$this->field['id_field'].']" rows="10" cols="50">'.filter_var($this->value, FILTER_SANITIZE_FULL_SPECIAL_CHARS).'</textarea>';
     }
 }
 
@@ -182,9 +182,9 @@ class PostFields_select extends PostFieldsBase
         $this->input_html = '<select name="postfield['.$this->field['id_field'].']">';
         foreach (json_decode($this->field['options']) as $v) {
             $true = (!$this->exists && $this->field['default_value'] == $v) || $this->value == $v;
-            $this->input_html .= '<option'.($true ? ' selected' : '').'>'.$v.'</option>';
+            $this->input_html .= '<option'.($true ? ' selected' : '').'>'.filter_var($v, FILTER_SANITIZE_FULL_SPECIAL_CHARS).'</option>';
             if ($true) {
-                $this->output_html = $v;
+                $this->output_html = filter_var($v, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
         $this->input_html .= '</select>';
@@ -210,7 +210,7 @@ class PostFields_select extends PostFieldsBase
             $value = $this->value;
         }
 
-        return $value;
+        return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 }
 
@@ -221,9 +221,9 @@ class PostFields_radio extends PostFields_select
         $this->input_html = '<fieldset>';
         foreach (json_decode($this->field['options']) as $v) {
             $true = (!$this->exists && $this->field['default_value'] == $v) || $this->value == $v;
-            $this->input_html .= '<label><input type="radio" name="postfield['.$this->field['id_field'].']"'.($true ? ' checked' : '').' value="'.$v.'"> '.$v.'</label><br>';
+            $this->input_html .= '<label><input type="radio" name="postfield['.$this->field['id_field'].']"'.($true ? ' checked' : '').' value="'.filter_var($v, FILTER_SANITIZE_FULL_SPECIAL_CHARS).'"> '.filter_var($v, FILTER_SANITIZE_FULL_SPECIAL_CHARS).'</label><br>';
             if ($true) {
-                $this->output_html = $v;
+                $this->output_html = filter_var($v, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
         $this->input_html .= '</fieldset>';
