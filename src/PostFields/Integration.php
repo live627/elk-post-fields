@@ -31,28 +31,6 @@ class Integration
         ];
     }
 
-    public function f__construct()
-    {
-        global $sourcedir;
-        if (!class_exists('ModHelper\Psr4AutoloaderClass')) {
-            require_once($sourcedir.'/PostFields/ModHelper/Psr4AutoloaderClass.php');
-        }
-        // instantiate the loader
-        $loader = new \ModHelper\Psr4AutoloaderClass;
-        // register the autoloader
-        $loader->register();
-        // register the base directories for the namespace prefix
-        $loader->addNamespace('ModHelper', $sourcedir.'/PostFields/ModHelper');
-        $loader->addNamespace('live627', $sourcedir.'/PostFields/live627');
-        $loader->addNamespace('Suki', $sourcedir.'/PostFields/Suki');
-
-        (new \ModHelper\Hooks)
-            ->add('admin_areas')
-            ->add('create_post')
-            ->add('before_modify_post')
-            ->execute(__CLASS__);
-    }
-
     public static function remove_message($message, $decreasePostCount)
     {
         self::remove_messages((array) $message, $decreasePostCount);
