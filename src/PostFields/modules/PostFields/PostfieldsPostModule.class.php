@@ -35,9 +35,9 @@ class Postfields_Post_Module implements ElkArte\sources\modules\Module_Interface
     {
         global $board, $topic, $txt;
 
-        $field_list = (new Util)->filterFields($board);
+        $util = new Util();
+        $field_list = $util->filterFields($board);
         loadLanguage('PostFields');
-        require_once(BOARDDIR.'/addons/PostFields/Class-PostFields.php');
 
         if (!empty($topic) && isset($_REQUEST['msg'])) {
             $request = Database::query(
@@ -59,14 +59,7 @@ class Postfields_Post_Module implements ElkArte\sources\modules\Module_Interface
                 continue;
             }
             $value = !isset($postfield[$field['id_field']]) ?: $postfield[$field['id_field']];
-            $class_name = 'ElkArte\\addons\\PostFields\\PostFields_'.$field['type'];
-            if (!class_exists($class_name)) {
-                Errors::instance()->fatal_error(
-                    'Param "'.$field['type'].'" not found for field "'.$field['name'].'" at ID #'.$field['id_field'].'.',
-                    false
-                );
-            }
-            $type = new $class_name($field, $value, !empty($value));
+            $type = $util->getFieldType($field, $value, !empty($value));
             $type->validate();
             if (false !== ($err = $type->getError())) {
                 $post_errors->addError($err);
@@ -108,13 +101,10 @@ class Postfields_Post_Module implements ElkArte\sources\modules\Module_Interface
             $value = !isset($postfield[$field['id_field']]) ?: trim($postfield[$field['id_field']]);
             $class_name = 'ElkArte\\addons\\PostFields\\PostFields_'.$field['type'];
 
-            if (!class_exists(
-                    $class_name
-                ) || (isset($values[$field['id_field']]) && $values[$field['id_field']] == $value)
-            ) {
+            if (isset($values[$field['id_field']]) && $values[$field['id_field']] == $value) {
                 continue;
             }
-            $type = new $class_name($field, $value, !empty($value));
+            $type = $util->getFieldType($field, $value, !empty($value));
             $changes[] = [$field['id_field'], $type->getValue(), $msgOptions['id']];
 
             $log_changes[] = [

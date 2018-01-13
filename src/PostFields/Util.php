@@ -87,17 +87,14 @@ class Util extends Ohara
             $fields = iterator_to_array($fields);
             $values = $this->getFieldValues([$_REQUEST['msg']], array_keys($fields));
         }
+        // If this was submitted already then make the value the posted version.
+        $values = array_replace(
+            $values,
+            filter_input(INPUT_POST, 'postfield', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)
+        );
         $value = '';
         $exists = false;
         foreach ($fields as $id_field => $field) {
-            // If this was submitted already then make the value the posted version.
-            if (isset($_POST['postfield'], $_POST['postfield'][$field['id_field']])) {
-                $value = $_POST['postfield'][$field['id_field']];
-                if (in_array($field['type'], ['select', 'radio'])) {
-                    $value =
-                        ($options = json_decode($field['options'])) && isset($options[$value]) ? $options[$value] : '';
-                }
-            }
             if (isset($values[$id_field])) {
                 $value = $values[$id_field];
             }
@@ -176,7 +173,7 @@ class Util extends Ohara
     /**
      * @param boolean $exists
      */
-    public function renderField($field, $value, $exists)
+    public function getFieldType($field, $value, $exists)
     {
         require_once(__DIR__.'/Class-PostFields.php');
         $class_name = __NAMESPACE__.'\\PostFields_'.$field['type'];
@@ -185,13 +182,21 @@ class Util extends Ohara
                 sprintf(
                     'Param "%s" not found for field "%s" at ID #%d.',
                     $field['type'],
-                    $field['name'],
+                    filter_var($field['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                     $field['id_field']
                 )
             );
         }
 
-        $param = new $class_name($field, $value, $exists);
+        return new $class_name($field, $value, $exists);
+    }
+
+    /**
+     * @param boolean $exists
+     */
+    public function renderField($field, $value, $exists)
+    {
+        $param = $this->getFieldType($field, $value, $exists);
         $param->setHtml();
         // Parse BBCode
         if ($field['bbc'] == 'yes') {
