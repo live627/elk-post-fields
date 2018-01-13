@@ -200,7 +200,7 @@ class Util extends Ohara
         $param->setHtml();
         // Parse BBCode
         if ($field['bbc'] == 'yes') {
-            $param->output_html = \BBC\ParserWrapper::getInstance()->parseMessage($param->output_html, false);
+            $param->output_html = \BBC\ParserWrapper::instance()->parseMessage($param->output_html, false);
         } // Allow for newlines at least
         elseif ($field['type'] == 'textarea') {
             $param->output_html = strtr($param->output_html, ["\n" => '<br>']);
