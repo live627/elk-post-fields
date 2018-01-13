@@ -85,7 +85,7 @@ class Util extends Ohara
         }
         if (isset($_REQUEST['msg'])) {
             $fields = iterator_to_array($fields);
-            $values = $this->getFieldValues($_REQUEST['msg'], array_keys($fields));
+            $values = $this->getFieldValues([$_REQUEST['msg']], array_keys($fields));
         }
         $value = '';
         $exists = false;
@@ -106,7 +106,7 @@ class Util extends Ohara
         }
     }
 
-    public function getFieldsValues($messages, array $field_list)
+    public function getFieldsValues(array $messages, array $field_list)
     {
         $request = Database::query(
             '',

@@ -84,7 +84,7 @@ class Postfields_Post_Module implements ElkArte\sources\modules\Module_Interface
         $value = '';
 
         if (isset($_REQUEST['msg'])) {
-            $values = $util->getFieldValues($_REQUEST['msg'], array_keys($field_list));
+            $values = $util->getFieldValues([$_REQUEST['msg']], array_keys($field_list));
         }
         if (!empty($topicOptions['id'])) {
             $request = Database::query(
